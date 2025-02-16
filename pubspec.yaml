@@ -1,0 +1,17 @@
+name: modal_date_picker
+description: Un paquete Flutter para sumar dos números.
+version: 0.0.1
+homepage: https://github.com/GianSandoval5/modal_date_picker
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=2.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
