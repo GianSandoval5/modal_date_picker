@@ -67,7 +67,8 @@ class _DateScrollViewState extends State<DateScrollView> {
   }
 
   double _getScrollViewWidth(BuildContext context) {
-    String longestText = widget.dates.longestString + widget.scrollViewOptions.label;
+    String longestText =
+        widget.dates.longestString + widget.scrollViewOptions.label;
     double textWidth = longestText.width(
       context,
       style: widget.scrollViewOptions.selectedTextStyle,
@@ -101,7 +102,8 @@ class _DateScrollViewState extends State<DateScrollView> {
               widget.onChanged(index);
             },
             childDelegate: widget.options.isLoop ??
-                    widget.scrollViewOptions.isLoop && widget.dates.length > maximumCount
+                    widget.scrollViewOptions.isLoop &&
+                        widget.dates.length > maximumCount
                 ? ListWheelChildLoopingListDelegate(
                     children: List<Widget>.generate(
                       widget.dates.length,
@@ -130,7 +132,8 @@ class _DateScrollViewState extends State<DateScrollView> {
           style: _selectedIndex == index
               ? widget.scrollViewOptions.selectedTextStyle
               : widget.scrollViewOptions.textStyle,
-          textScaler: TextScaler.linear(widget.scrollViewOptions.textScaleFactor),
+          textScaler:
+              TextScaler.linear(widget.scrollViewOptions.textScaleFactor),
         ),
       ),
     );

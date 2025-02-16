@@ -13,10 +13,7 @@ class DatePickerScrollViewOptions {
     required this.day,
     this.mainAxisAlignment = MainAxisAlignment.center,
     this.crossAxisAlignment = CrossAxisAlignment.center,
- 
   });
-
-
 
   // Applies the given [ScrollViewDetailOptions] to all three options ie. year, month and day.
   static DatePickerScrollViewOptions all(ScrollViewDetailOptions value) {
