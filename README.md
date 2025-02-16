@@ -1,8 +1,8 @@
 # Modal Date Picker
 
-A modal-based date picker for Flutter that provides an intuitive and customizable way to select dates. Designed for seamless integration on Android, iOS, and Web. 🎉
+A modal-based date picker for Flutter that provides an intuitive and customizable way to select dates. Designed for seamless integration on Android, iOS, Windows and Web. 🎉
 
-Compatible with Android & iOS & Web. :heart_eyes:
+Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
@@ -19,7 +19,7 @@ Works seamlessly with Flutter's TextFormField
 
 ## 📸 Showcase
 
-<img src = "https://giansandoval.com/vid/1.gif" width = 200> <img src = "https://giansandoval.com/vid/2.gif" width = 200>
+<img src = "https://giansandoval.com/vid/1.gif" width = 220> <img src = "https://giansandoval.com/vid/2.gif" width = 220>
 
 <br> 
 

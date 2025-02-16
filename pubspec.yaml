@@ -1,6 +1,6 @@
 name: modal_date_picker
-description: Un paquete Flutter para sumar dos números.
-version: 0.0.1
+description: modal_date_picker is a flutter package that allows you to pick a date from a modal in TextFormFields.
+version: 0.0.2
 homepage: https://github.com/GianSandoval5/modal_date_picker
 
 environment:
