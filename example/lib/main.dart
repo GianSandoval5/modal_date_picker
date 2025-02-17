@@ -104,6 +104,8 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
+                  //sino desea formatear la fecha pasar en false
+                  formatDate: false,
                   context: context,
                   controller: _controller3,
                   styleConfirmText: const TextStyle(

@@ -65,7 +65,7 @@ void dateCustomModalBottomSheet({
                           controller.text = formattedDate;
                         } else {
                           controller.text = value.toIso8601String();
-                          print("controller.text: ${controller.text}");
+                          //print("controller.text: ${controller.text}");
                         }
                       });
                     },
