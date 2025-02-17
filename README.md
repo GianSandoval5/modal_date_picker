@@ -6,6 +6,10 @@ Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
+## Versión 0.05
+. Adds support to make date formatting optional.
+. Removed intl because it tends to give errors in some cases where intl is used in conjunction
+
 
 ## ✨ Features
 Fully customizable
