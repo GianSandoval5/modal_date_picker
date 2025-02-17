@@ -53,10 +53,11 @@ void dateCustomModalBottomSheet({
                     locale: locale,
                     minimumDate: DateTime(1900),
                     maximumDate: DateTime.now(),
-                    onDateTimeChanged:  (DateTime value) {
+                    onDateTimeChanged: (DateTime value) {
                       setState(() {
                         if (formatDate) {
-                          controller.text = "${value.day}/${value.month}/${value.year}";
+                          controller.text =
+                              "${value.day}/${value.month}/${value.year}";
                         } else {
                           controller.text = value.toIso8601String();
                         }

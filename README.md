@@ -6,6 +6,11 @@ Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
+## Versión 0.06
+. Adds support to make date formatting optional.
+. Removed intl because it tends to give errors in some cases where intl is used in conjunction.
+. Clear example code is provided.
+
 
 ## ✨ Features
 Fully customizable
@@ -87,91 +92,111 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.indigoAccent,
-        title: const Text('Modal Date Picker', style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold)),
+        title: const Text('Modal Date Picker',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
       ),
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              SizedBox(height: 40),
-              //ejemplo de usar en español
-              TextFormField(
-                readOnly: true,
-                controller: _controller,
-                decoration: InputDecoration(
-                  label: const Text('Selecciona una fecha'),
-                  hintText: 'Selecciona una fecha',
-                  suffixIcon: Icon(Icons.calendar_month_outlined),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+          child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            SizedBox(height: 40),
+            //ejemplo de usar en español
+            TextFormField(
+              readOnly: true,
+              controller: _controller,
+              decoration: InputDecoration(
+                label: const Text('Selecciona una fecha'),
+                hintText: 'Selecciona una fecha',
+                suffixIcon: Icon(Icons.calendar_month_outlined),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () {
-                  dateCustomModalBottomSheet(
-                    context: context,
-                    controller: _controller,
-                    //OPCIONALES
-                    locale: Locale('es', 'ES'),
-                    //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
-                    viewType: [DatePickerViewType.day, DatePickerViewType.month, DatePickerViewType.year],
-                   );
-                },
               ),
-              SizedBox(height: 20),
-              //ejemplo de usar en ingles
-              TextFormField(
-                readOnly: true,
-                controller: _controller2,
-                decoration: InputDecoration(
-                  label: const Text('Select a date'),
-                  hintText: 'Select a date',
-                  suffixIcon: Icon(Icons.calendar_month_outlined),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              onTap: () {
+                dateCustomModalBottomSheet(
+                  context: context,
+                  controller: _controller,
+                  //OPCIONALES
+                  locale: Locale('es', 'ES'),
+                  //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
+                  viewType: [
+                    DatePickerViewType.day,
+                    DatePickerViewType.month,
+                    DatePickerViewType.year
+                  ],
+                );
+              },
+            ),
+            SizedBox(height: 20),
+            //ejemplo de usar en ingles
+            TextFormField(
+              readOnly: true,
+              controller: _controller2,
+              decoration: InputDecoration(
+                label: const Text('Select a date'),
+                hintText: 'Select a date',
+                suffixIcon: Icon(Icons.calendar_month_outlined),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () {
-                  dateCustomModalBottomSheet(
-                    context: context,
-                    controller: _controller2,
-                   );
-                },
               ),
-              SizedBox(height: 20),
-              //ejemplo al cambiar los colores
-               TextFormField(
-                readOnly: true,
-                controller: _controller3,
-                decoration: InputDecoration(
-                  label: const Text('Select a date'),
-                  hintText: 'Select a date',
-                  suffixIcon: Icon(Icons.calendar_month_outlined),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
+              onTap: () {
+                dateCustomModalBottomSheet(
+                  context: context,
+                  controller: _controller2,
+                );
+              },
+            ),
+            SizedBox(height: 20),
+            //ejemplo al cambiar los colores
+            TextFormField(
+              readOnly: true,
+              controller: _controller3,
+              decoration: InputDecoration(
+                label: const Text('Select a date'),
+                hintText: 'Select a date',
+                suffixIcon: Icon(Icons.calendar_month_outlined),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                onTap: () {
-                  dateCustomModalBottomSheet(
-                    context: context,
-                    controller: _controller3,
-                    styleConfirmText: const TextStyle(fontWeight: FontWeight.bold, height: 1.0,color: Colors.white),
-                    //OPCIONALES
-                    //cambiar colores
-                    colorBackground: Colors.blue,
-                    colorIndicator: Colors.white,
-                    locale: Locale('en', 'US'),
-                    //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
-                    viewType: [DatePickerViewType.day, DatePickerViewType.month, DatePickerViewType.year],
-                    selectedTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
-                    textStyle: const TextStyle(color: Colors.white),
-                   );
-                },
               ),
-            ],
-          ),
-        )
-      ),
+              onTap: () {
+                dateCustomModalBottomSheet(
+                  //si desea formatear la fecha a dd/MM/yyyy
+                  formatDate: true,
+                  context: context,
+                  //OPCIONALES
+                  selectedDate: _controller.text.isEmpty
+                            ? DateFormat('dd/MM/yyyy').parse(_controller.text)
+                            : DateTime.parse(_controller.text),
+                  controller: _controller3,
+                  styleConfirmText: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      height: 1.0,
+                      color: Colors.white),
+                  //OPCIONALES
+                  //cambiar colores
+                  colorBackground: Colors.blue,
+                  colorIndicator: Colors.white,
+                  locale: Locale('en', 'US'),
+                  //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
+                  viewType: [
+                    DatePickerViewType.day,
+                    DatePickerViewType.month,
+                    DatePickerViewType.year
+                  ],
+                  selectedTextStyle: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                  textStyle: const TextStyle(color: Colors.white),
+                );
+              },
+            ),
+          ],
+        ),
+      )),
     );
   }
 }
