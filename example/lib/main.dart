@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_date_picker/modal_date_picker.dart';
 
 void main() => runApp(const MyApp());
@@ -104,9 +105,13 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
-                  //sino desea formatear la fecha pasar en false
-                  formatDate: false,
+                  //si desea formatear la fecha a dd/MM/yyyy
+                  formatDate: true,
                   context: context,
+                  //OPCIONALES
+                  selectedDate: _controller.text.isEmpty
+                            ? DateFormat('dd/MM/yyyy').parse(_controller.text)
+                            : DateTime.parse(_controller.text),
                   controller: _controller3,
                   styleConfirmText: const TextStyle(
                       fontWeight: FontWeight.bold,

@@ -3,7 +3,6 @@ library modal_date_picker;
 export 'src/models/date_picker_view_type.dart';
 export 'src/scroll_date_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_date_picker/src/export.dart';
 
 void dateCustomModalBottomSheet({
@@ -19,6 +18,7 @@ void dateCustomModalBottomSheet({
   TextStyle textStyle = const TextStyle(color: Colors.black),
   TextStyle styleConfirmText = const TextStyle(
       fontWeight: FontWeight.bold, height: 1.0, color: Colors.indigoAccent),
+  DateTime? selectedDate,
 }) {
   showModalBottomSheet(
     barrierColor: Colors.transparent,
@@ -49,23 +49,16 @@ void dateCustomModalBottomSheet({
                     viewType: viewType,
                     colorBackground: colorBackground,
                     colorIndicator: colorIndicator,
-                    selectedDate: controller.text.isEmpty
-                        ? DateTime(1980)
-                        : formatDate
-                            ? DateFormat('dd/MM/yyyy').parse(controller.text)
-                            : DateTime.parse(controller.text),
+                    selectedDate: selectedDate ?? DateTime(1980),
                     locale: locale,
                     minimumDate: DateTime(1900),
                     maximumDate: DateTime.now(),
-                    onDateTimeChanged: (DateTime value) {
+                    onDateTimeChanged:  (DateTime value) {
                       setState(() {
                         if (formatDate) {
-                          final DateFormat formatter = DateFormat('dd/MM/yyyy');
-                          String formattedDate = formatter.format(value);
-                          controller.text = formattedDate;
+                          controller.text = "${value.day}/${value.month}/${value.year}";
                         } else {
                           controller.text = value.toIso8601String();
-                          //print("controller.text: ${controller.text}");
                         }
                       });
                     },
