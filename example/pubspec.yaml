@@ -1,7 +1,7 @@
 name: example
 description: "A new Flutter project."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 0.0.4
+version: 0.0.5
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -15,6 +15,7 @@ dependencies:
     #   modal_date_picker: ^x.y.z
     path: ../
   cupertino_icons: ^1.0.8
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
