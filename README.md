@@ -6,10 +6,11 @@ Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
-## Versión 0.06
-. Adds support to make date formatting optional.
-. Removed intl because it tends to give errors in some cases where intl is used in conjunction.
-. Clear example code is provided.
+## Versión 0.07
+* Adds support to make date formatting optional.
+* Removed intl because it tends to give errors in some cases where intl is used in conjunction.
+* Clear example code is provided.
+* It has been improved so that the date format dd/MM/yyyy or yyyy/MM/dd can be used
 
 
 ## ✨ Features
@@ -86,6 +87,13 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller2 = TextEditingController();
   final TextEditingController _controller3 = TextEditingController();
 
+  void _onDateTimeChanged(DateTime value) {
+    setState(() {
+      _controller3.text =
+          "${value.year}/${value.month.toString().padLeft(2, '0')}/${value.day.toString().padLeft(2, '0')}";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,12 +127,6 @@ class _HomePageState extends State<HomePage> {
                   controller: _controller,
                   //OPCIONALES
                   locale: Locale('es', 'ES'),
-                  //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
-                  viewType: [
-                    DatePickerViewType.day,
-                    DatePickerViewType.month,
-                    DatePickerViewType.year
-                  ],
                 );
               },
             ),
@@ -163,13 +165,9 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
-                  //si desea formatear la fecha a dd/MM/yyyy
+                  //si desea formatear la fecha a yyyy/MM/dd
                   formatDate: true,
                   context: context,
-                  //OPCIONALES
-                  selectedDate: _controller.text.isEmpty
-                            ? DateFormat('dd/MM/yyyy').parse(_controller.text)
-                            : DateTime.parse(_controller.text),
                   controller: _controller3,
                   styleConfirmText: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -182,15 +180,16 @@ class _HomePageState extends State<HomePage> {
                   locale: Locale('en', 'US'),
                   //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
                   viewType: [
-                    DatePickerViewType.day,
+                    DatePickerViewType.year,
                     DatePickerViewType.month,
-                    DatePickerViewType.year
+                    DatePickerViewType.day
                   ],
                   selectedTextStyle: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                   textStyle: const TextStyle(color: Colors.white),
+                  onDateTimeChanged: _onDateTimeChanged,
                 );
               },
             ),
@@ -206,17 +205,10 @@ class _HomePageState extends State<HomePage> {
 You can customize the date picker appearance, locale, and format.
 ```dart
 dateCustomModalBottomSheet(
-  context: context,
-  controller: _controller,
-  locale: const Locale('es', 'ES'), // Spanish
-  colorBackground: Colors.blue, // Background color
-  colorIndicator: Colors.white, // Indicator color
-  selectedTextStyle: const TextStyle(
-    color: Colors.black,
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
-  ),
-  textStyle: const TextStyle(color: Colors.white),
+context: context,
+controller: _controller,
+//OPCIONALES
+locale: Locale('es', 'ES'),
 );
 ```
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:modal_date_picker/modal_date_picker.dart';
 
 void main() => runApp(const MyApp());
@@ -27,6 +26,13 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _controller2 = TextEditingController();
   final TextEditingController _controller3 = TextEditingController();
+
+  void _onDateTimeChanged(DateTime value) {
+    setState(() {
+      _controller3.text =
+          "${value.year}/${value.month.toString().padLeft(2, '0')}/${value.day.toString().padLeft(2, '0')}";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +67,6 @@ class _HomePageState extends State<HomePage> {
                   controller: _controller,
                   //OPCIONALES
                   locale: Locale('es', 'ES'),
-                  //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
-                  viewType: [
-                    DatePickerViewType.day,
-                    DatePickerViewType.month,
-                    DatePickerViewType.year
-                  ],
                 );
               },
             ),
@@ -105,13 +105,9 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
-                  //si desea formatear la fecha a dd/MM/yyyy
+                  //si desea formatear la fecha a yyyy/MM/dd
                   formatDate: true,
                   context: context,
-                  //OPCIONALES
-                  selectedDate: _controller.text.isEmpty
-                            ? DateFormat('dd/MM/yyyy').parse(_controller.text)
-                            : DateTime.parse(_controller.text),
                   controller: _controller3,
                   styleConfirmText: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -124,15 +120,16 @@ class _HomePageState extends State<HomePage> {
                   locale: Locale('en', 'US'),
                   //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
                   viewType: [
-                    DatePickerViewType.day,
+                    DatePickerViewType.year,
                     DatePickerViewType.month,
-                    DatePickerViewType.year
+                    DatePickerViewType.day
                   ],
                   selectedTextStyle: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                       fontSize: 18),
                   textStyle: const TextStyle(color: Colors.white),
+                  onDateTimeChanged: _onDateTimeChanged,
                 );
               },
             ),
