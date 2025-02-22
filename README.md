@@ -6,11 +6,10 @@ Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
-## Versión 0.07
-* Adds support to make date formatting optional.
-* Removed intl because it tends to give errors in some cases where intl is used in conjunction.
-* Clear example code is provided.
-* It has been improved so that the date format dd/MM/yyyy or yyyy/MM/dd can be used
+## Versión 0.08
+* Adds minimumDate
+* Adds maximumDate
+* Default Locale('es', 'ES'),
 
 
 ## ✨ Features
@@ -151,7 +150,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             SizedBox(height: 20),
-            //ejemplo al cambiar los colores
+            //ejemplo al cambiar varios datos
             TextFormField(
               readOnly: true,
               controller: _controller3,
@@ -165,6 +164,10 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
+                  //por defecto DateTime(1980)
+                  minimumDate: DateTime(1990),
+                  //por defecto DateTime.now()
+                  maximumDate: DateTime(2100),
                   //si desea formatear la fecha a yyyy/MM/dd
                   formatDate: true,
                   context: context,
@@ -177,6 +180,7 @@ class _HomePageState extends State<HomePage> {
                   //cambiar colores
                   colorBackground: Colors.blue,
                   colorIndicator: Colors.white,
+                  //Por defecto Locale('es','ES')
                   locale: Locale('en', 'US'),
                   //POR DEFECTO dd/MM/yyyy - asi puedes cambiar el orden
                   viewType: [

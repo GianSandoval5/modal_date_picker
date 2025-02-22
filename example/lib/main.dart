@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
               },
             ),
             SizedBox(height: 20),
-            //ejemplo al cambiar los colores
+            //ejemplo al cambiar varios datos
             TextFormField(
               readOnly: true,
               controller: _controller3,
@@ -105,6 +105,10 @@ class _HomePageState extends State<HomePage> {
               ),
               onTap: () {
                 dateCustomModalBottomSheet(
+                  //por defecto DateTime(1980)
+                  minimumDate: DateTime(1990),
+                  //por defecto DateTime.now()
+                  maximumDate: DateTime(2100),
                   //si desea formatear la fecha a yyyy/MM/dd
                   formatDate: true,
                   context: context,

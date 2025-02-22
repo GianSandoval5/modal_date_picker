@@ -27,7 +27,7 @@ void dateCustomModalBottomSheet({
   required TextEditingController controller,
   Color colorBackground = Colors.white,
   Color colorIndicator = Colors.indigoAccent,
-  Locale locale = const Locale('en', 'US'),
+  Locale locale = const Locale('es', 'ES'),
   bool formatDate = false, // Nuevo parámetro opcional
   List<DatePickerViewType>? viewType,
   TextStyle selectedTextStyle = const TextStyle(
@@ -36,6 +36,8 @@ void dateCustomModalBottomSheet({
   TextStyle styleConfirmText = const TextStyle(
       fontWeight: FontWeight.bold, height: 1.0, color: Colors.indigoAccent),
   void Function(DateTime)? onDateTimeChanged, // Nuevo parámetro opcional
+  DateTime? minimumDate,
+  DateTime? maximumDate,
 }) {
   DateTime? selectedDate = controller.text.isNotEmpty
       ? _parseDate(controller.text,
@@ -80,8 +82,8 @@ void dateCustomModalBottomSheet({
                     colorIndicator: colorIndicator,
                     selectedDate: selectedDate ?? DateTime(1980),
                     locale: locale,
-                    minimumDate: DateTime(1900),
-                    maximumDate: DateTime.now(),
+                    minimumDate: minimumDate ?? DateTime(1980),
+                    maximumDate: maximumDate ?? DateTime.now(),
                     onDateTimeChanged: (DateTime value) {
                       if (onDateTimeChanged != null) {
                         onDateTimeChanged(value);
