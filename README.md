@@ -6,19 +6,25 @@ Compatible with Android, iOS, Windows & Web. :heart_eyes:
 
 [![pub](https://img.shields.io/pub/v/modal_date_picker)](https://pub.dev/packages/modal_date_picker)
 
-## Versión 0.08
-* Adds minimumDate
-* Adds maximumDate
-* Default Locale('es', 'ES'),
+## Versión 0.0.9
 
+- 🐛 Fixed: date no longer resets when switching between day, month, and year columns
+- 🐛 Fixed: scrolling now updates the `TextEditingController` immediately (same as tapping)
+- ♻️ Complete internal rewrite for stability and reliability
+- Adds `minimumDate` and `maximumDate` support
+- Default `Locale('es', 'ES')`
 
 ## ✨ Features
-Fully customizable
-Supports multiple locales (e.g., English, Spanish, etc.)
-Allows different date formats
-Customizable colors and styles
-Works seamlessly with Flutter's TextFormField
 
+- 📅 Fully customizable modal date picker
+- 🌍 Supports multiple locales (English, Spanish, French, German, and more)
+- 🔄 Smooth scroll-based selection for year, month, and day
+- 🎯 Day is preserved when changing month or year (adjusts only if invalid, e.g., Feb 31 → Feb 28)
+- 📝 Real-time `TextEditingController` update on both scroll and tap
+- 🎨 Customizable colors, text styles, and indicator
+- 📐 Configurable date format (`dd/MM/yyyy` or `yyyy/MM/dd`)
+- 📱 Works seamlessly with Flutter's `TextFormField`
+- 🖥️ Compatible with Android, iOS, Windows & Web
 
 <br>
 
@@ -26,7 +32,7 @@ Works seamlessly with Flutter's TextFormField
 
 <img src = "https://giansandoval.com/vid/1.gif" width = 220> <img src = "https://giansandoval.com/vid/2.gif" width = 220>
 
-<br> 
+<br>
 
 ## 🚀 Installation
 
@@ -34,10 +40,11 @@ Add the dependency to your pubspec.yaml:
 
 ```yaml
 dependencies:
-  modal_date_picker : "^lastest_version"
+  modal_date_picker: "^lastest_version"
 ```
 
 Then, run:
+
 ```sh
 flutter pub get
 ```
@@ -45,7 +52,9 @@ flutter pub get
 <br>
 
 ## 🔥 Usage
+
 Import the package:
+
 ```dart
 import 'package:modal_date_picker/modal_date_picker.dart';
 ```
@@ -53,6 +62,7 @@ import 'package:modal_date_picker/modal_date_picker.dart';
 <br>
 
 ## 📌 Example
+
 ```dart
 import 'package:flutter/material.dart';
 import 'package:modal_date_picker/modal_date_picker.dart';
@@ -206,23 +216,51 @@ class _HomePageState extends State<HomePage> {
 ```
 
 ## 🎨 Customization
-You can customize the date picker appearance, locale, and format.
+
+### Basic usage
+
 ```dart
 dateCustomModalBottomSheet(
-context: context,
-controller: _controller,
-//OPCIONALES
-locale: Locale('es', 'ES'),
+  context: context,
+  controller: _controller,
+);
+```
+
+### All available parameters
+
+```dart
+dateCustomModalBottomSheet(
+  context: context,
+  controller: _controller,
+  // Date range
+  minimumDate: DateTime(1990),        // default: DateTime(1980)
+  maximumDate: DateTime(2100),        // default: DateTime.now()
+  // Locale
+  locale: Locale('es', 'ES'),        // default: Locale('es', 'ES')
+  // Date format
+  formatDate: true,                   // true = yyyy/MM/dd, false = dd/MM/yyyy (default)
+  // Column order
+  viewType: [
+    DatePickerViewType.day,
+    DatePickerViewType.month,
+    DatePickerViewType.year,
+  ],
+  // Colors
+  colorBackground: Colors.white,
+  colorIndicator: Colors.indigoAccent,
+  colorConfirmButton: Colors.indigoAccent,
+  // Text styles
+  selectedTextStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+  textStyle: TextStyle(color: Colors.black),
+  styleConfirmText: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+  // Button
+  borderRadiusButton: BorderRadius.circular(10),
+  heightButtom: 25.0,
+  // Custom callback (overrides default TextEditingController update)
+  onDateTimeChanged: (DateTime value) {
+    print('Selected: $value');
+  },
 );
 ```
 
 ## 📜 License
-```
-Copyright © 2025, Flutter Project Authors.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-```

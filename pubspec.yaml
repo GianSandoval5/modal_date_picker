@@ -1,6 +1,6 @@
 name: modal_date_picker
 description: modal_date_picker is a flutter package that allows you to pick a date from a modal in TextFormFields.
-version: 0.0.8
+version: 0.0.9
 homepage: https://github.com/GianSandoval5/modal_date_picker
 
 environment:

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:modal_date_picker/src/export.dart';
 
@@ -18,144 +16,66 @@ class ScrollDatePicker extends StatefulWidget {
     this.colorIndicator = Colors.indigoAccent,
     required this.scrollViewOptions,
     required this.styleConfirmText,
-    // this.selectedTextStyle = const TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-    //this.textStyle = const TextStyle(fontSize: 20, color: Colors.black),
+    required this.colorConfirmButton,
+    this.borderRadiusButton = const BorderRadius.all(Radius.circular(10)),
+    this.heightButtom = 25,
   })  : minimumDate = minimumDate ?? DateTime(1960, 1, 1),
         maximumDate = maximumDate ?? DateTime.now(),
         locale = locale ?? const Locale('en', 'US'),
         options = options ?? const DatePickerOptions();
 
   final List<DatePickerViewType>? viewType;
-
-  /// The currently selected date.
   final DateTime selectedDate;
-
-  /// Minimum year that the picker can be scrolled
   final DateTime minimumDate;
-
-  /// Maximum year that the picker can be scrolled
   final DateTime maximumDate;
-
-  /// On optional listener that's called when the centered item changes.
   final ValueChanged<DateTime> onDateTimeChanged;
-
-  /// A set that allows you to specify options related to ListWheelScrollView.
   final DatePickerOptions options;
-
-  /// Set calendar language
   final Locale locale;
-
-  /// A set that allows you to specify options related to ScrollView.
   final DatePickerScrollViewOptions scrollViewOptions;
-
-  /// Indicator displayed in the center of the ScrollDatePicker
   final Widget? indicator;
-
-  ///color of the background
   final Color colorBackground;
-
-  ///color of the indicator
   final Color colorIndicator;
-
-  ///style of the confirm text
   final TextStyle styleConfirmText;
+  final Color colorConfirmButton;
+  final BorderRadius borderRadiusButton;
+  final double heightButtom;
 
   @override
   State<ScrollDatePicker> createState() => _ScrollDatePickerState();
 }
 
 class _ScrollDatePickerState extends State<ScrollDatePicker> {
-  /// This widget's year selection and animation state.
   late FixedExtentScrollController _yearController;
-
-  /// This widget's month selection and animation state.
   late FixedExtentScrollController _monthController;
-
-  /// This widget's day selection and animation state.
   late FixedExtentScrollController _dayController;
 
-  late Widget _yearScrollView;
-  late Widget _monthScrollView;
-  late Widget _dayScrollView;
+  late DateTime _currentDate;
+  late List<int> _years;
+  late List<int> _months;
+  late List<int> _days;
 
-  late DateTime _selectedDate;
-  bool isYearScrollable = true;
-  bool isMonthScrollable = true;
-  List<int> _years = [];
-  List<int> _months = [];
-  List<int> _days = [];
+  /// When true, onSelectedItemChanged callbacks are ignored.
+  bool _silent = false;
 
-  int get selectedYearIndex => !_years.contains(_selectedDate.year)
-      ? 0
-      : _years.indexOf(_selectedDate.year);
-
-  int get selectedMonthIndex => !_months.contains(_selectedDate.month)
-      ? 0
-      : _months.indexOf(_selectedDate.month);
-
-  int get selectedDayIndex {
-    return !_days.contains(_selectedDate.day)
-        ? 0
-        : _days.indexOf(_selectedDate.day);
-  }
-
-  int get selectedYear {
-    if (_yearController.hasClients) {
-      return _years[_yearController.selectedItem % _years.length];
-    }
-    return DateTime.now().year;
-  }
-
-  int get selectedMonth {
-    if (_monthController.hasClients) {
-      return _months[_monthController.selectedItem % _months.length];
-    }
-    return DateTime.now().month;
-  }
-
-  int get selectedDay {
-    if (_dayController.hasClients) {
-      return _days[_dayController.selectedItem % _days.length];
-    }
-    return DateTime.now().day;
-  }
+  // ───────── Lifecycle ─────────
 
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.selectedDate.isAfter(widget.maximumDate) ||
-            widget.selectedDate.isBefore(widget.minimumDate)
-        ? DateTime.now()
-        : widget.selectedDate;
+    _currentDate = _clamp(widget.selectedDate);
+    _years = _buildYears();
+    _months = _buildMonths(_currentDate.year);
+    _days = _buildDays(_currentDate.year, _currentDate.month);
 
-    _years = [
-      for (int i = widget.minimumDate.year; i <= widget.maximumDate.year; i++) i
-    ];
-    _initMonths();
-    _initDays();
-    _yearController =
-        FixedExtentScrollController(initialItem: selectedYearIndex);
-    _monthController =
-        FixedExtentScrollController(initialItem: selectedMonthIndex);
-    _dayController = FixedExtentScrollController(initialItem: selectedDayIndex);
-  }
-
-  @override
-  void didUpdateWidget(covariant ScrollDatePicker oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (_selectedDate != widget.selectedDate) {
-      _selectedDate = widget.selectedDate;
-      isYearScrollable = false;
-      isMonthScrollable = false;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _yearController.animateToItem(selectedYearIndex,
-            curve: Curves.ease, duration: const Duration(microseconds: 500));
-        _monthController.animateToItem(selectedMonthIndex,
-            curve: Curves.ease, duration: const Duration(microseconds: 500));
-        _dayController.animateToItem(selectedDayIndex,
-            curve: Curves.ease, duration: const Duration(microseconds: 500));
-      });
-    }
+    _yearController = FixedExtentScrollController(
+      initialItem: _indexOf(_years, _currentDate.year),
+    );
+    _monthController = FixedExtentScrollController(
+      initialItem: _indexOf(_months, _currentDate.month),
+    );
+    _dayController = FixedExtentScrollController(
+      initialItem: _indexOf(_days, _currentDate.day),
+    );
   }
 
   @override
@@ -166,196 +86,245 @@ class _ScrollDatePickerState extends State<ScrollDatePicker> {
     super.dispose();
   }
 
-  void _initDateScrollView() {
-    _yearScrollView = Padding(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+  // ───────── Data helpers ─────────
+
+  DateTime _clamp(DateTime d) {
+    if (d.isBefore(widget.minimumDate)) return widget.minimumDate;
+    if (d.isAfter(widget.maximumDate)) return widget.maximumDate;
+    return d;
+  }
+
+  int _indexOf(List<int> list, int value) {
+    final i = list.indexOf(value);
+    return i >= 0 ? i : 0;
+  }
+
+  List<int> _buildYears() => [
+        for (int i = widget.minimumDate.year; i <= widget.maximumDate.year; i++)
+          i
+      ];
+
+  List<int> _buildMonths(int year) {
+    int first = 1, last = 12;
+    if (year == widget.minimumDate.year) first = widget.minimumDate.month;
+    if (year == widget.maximumDate.year) last = widget.maximumDate.month;
+    return [for (int i = first; i <= last; i++) i];
+  }
+
+  List<int> _buildDays(int year, int month) {
+    final maxDay = getMonthlyDate(year: year, month: month);
+    int first = 1, last = maxDay;
+    if (year == widget.minimumDate.year && month == widget.minimumDate.month) {
+      first = widget.minimumDate.day;
+    }
+    if (year == widget.maximumDate.year && month == widget.maximumDate.month) {
+      last = widget.maximumDate.day;
+    }
+    return [for (int i = first; i <= last; i++) i];
+  }
+
+  int _safeValue(FixedExtentScrollController c, List<int> list, int fallback) {
+    if (!c.hasClients || list.isEmpty) return fallback;
+    final idx = c.selectedItem;
+    return (idx >= 0 && idx < list.length) ? list[idx] : fallback;
+  }
+
+  // ───────── Core update logic ─────────
+
+  /// Called whenever ANY column changes (scroll or tap).
+  /// Reads the current value from the changed column, preserves the others,
+  /// recalculates dependent lists, and emits the new date.
+  void _onYearChanged(int yearIdx) {
+    if (_silent) return;
+    if (yearIdx < 0 || yearIdx >= _years.length) return;
+
+    final year = _years[yearIdx];
+    final wantMonth = _safeValue(_monthController, _months, _currentDate.month);
+    final wantDay = _safeValue(_dayController, _days, _currentDate.day);
+
+    _months = _buildMonths(year);
+    final month = _months.contains(wantMonth) ? wantMonth : _months.last;
+
+    _days = _buildDays(year, month);
+    final day = _days.contains(wantDay) ? wantDay : _days.last;
+
+    _currentDate = DateTime(year, month, day);
+    widget.onDateTimeChanged(_currentDate);
+
+    _silent = true;
+    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_monthController.hasClients) {
+        _monthController.jumpToItem(_indexOf(_months, month));
+      }
+      if (_dayController.hasClients) {
+        _dayController.jumpToItem(_indexOf(_days, day));
+      }
+      _silent = false;
+    });
+  }
+
+  void _onMonthChanged(int monthIdx) {
+    if (_silent) return;
+    if (monthIdx < 0 || monthIdx >= _months.length) return;
+
+    final month = _months[monthIdx];
+    final wantDay = _safeValue(_dayController, _days, _currentDate.day);
+
+    _days = _buildDays(_currentDate.year, month);
+    final day = _days.contains(wantDay) ? wantDay : _days.last;
+
+    _currentDate = DateTime(_currentDate.year, month, day);
+    widget.onDateTimeChanged(_currentDate);
+
+    _silent = true;
+    setState(() {});
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_dayController.hasClients) {
+        _dayController.jumpToItem(_indexOf(_days, day));
+      }
+      _silent = false;
+    });
+  }
+
+  void _onDayChanged(int dayIdx) {
+    if (_silent) return;
+    if (dayIdx < 0 || dayIdx >= _days.length) return;
+
+    final day = _days[dayIdx];
+    final newDate = DateTime(_currentDate.year, _currentDate.month, day);
+    if (newDate == _currentDate) return;
+
+    _currentDate = newDate;
+    widget.onDateTimeChanged(_currentDate);
+  }
+
+  // ───────── Build column widgets ─────────
+
+  Widget _buildYearColumn() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 25),
       child: DateScrollView(
-          key: const Key("year"),
-          dates: _years,
-          controller: _yearController,
-          options: widget.options,
-          scrollViewOptions: widget.scrollViewOptions.year,
-          //selectedTextStyle: widget.selectedTextStyle,
-          //textStyle: widget.textStyle,
-          selectedIndex: selectedYearIndex,
-          locale: widget.locale,
-          onTap: (int index) => _yearController.jumpToItem(index),
-          onChanged: (_) {
-            _onDateTimeChanged();
-            _initMonths();
-            _initDays();
-            if (isYearScrollable) {
-              _monthController.jumpToItem(selectedMonthIndex);
-              _dayController.jumpToItem(selectedDayIndex);
-            }
-            isYearScrollable = true;
-          }),
-    );
-    _monthScrollView = Padding(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 25),
-      child: DateScrollView(
-        scrollViewOptions: widget.scrollViewOptions.month,
-        key: const Key("month"),
-        dates: widget.locale.months.sublist(_months.first - 1, _months.last),
-        controller: _monthController,
+        key: const Key('year'),
+        dates: _years,
+        controller: _yearController,
         options: widget.options,
-        //selectedTextStyle: widget.selectedTextStyle,
-        // textStyle: widget.textStyle,
-        selectedIndex: selectedMonthIndex,
+        scrollViewOptions: widget.scrollViewOptions.year,
+        selectedIndex: _indexOf(_years, _currentDate.year),
         locale: widget.locale,
-        onTap: (int index) => _monthController.jumpToItem(index),
-        onChanged: (_) {
-          _onDateTimeChanged();
-          _initDays();
-          if (isMonthScrollable) {
-            _dayController.jumpToItem(selectedDayIndex);
-          }
-          isMonthScrollable = true;
+        onChanged: _onYearChanged,
+        onTap: (int index) {
+          _yearController.jumpToItem(index);
+          _onYearChanged(index);
         },
       ),
     );
-    _dayScrollView = Padding(
-      padding: EdgeInsets.only(left: 20, right: 20, top: 25),
+  }
+
+  Widget _buildMonthColumn() {
+    final monthNames = <String>[];
+    for (final m in _months) {
+      final all = widget.locale.months;
+      monthNames.add((m - 1 < all.length) ? all[m - 1] : '$m');
+    }
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 25),
       child: DateScrollView(
-        key: const Key("day"),
+        key: const Key('month'),
+        dates: monthNames,
+        controller: _monthController,
+        options: widget.options,
+        scrollViewOptions: widget.scrollViewOptions.month,
+        selectedIndex: _indexOf(_months, _currentDate.month),
+        locale: widget.locale,
+        onChanged: _onMonthChanged,
+        onTap: (int index) {
+          _monthController.jumpToItem(index);
+          _onMonthChanged(index);
+        },
+      ),
+    );
+  }
+
+  Widget _buildDayColumn() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 25),
+      child: DateScrollView(
+        key: const Key('day'),
         dates: _days,
         controller: _dayController,
         options: widget.options,
         scrollViewOptions: widget.scrollViewOptions.day,
-        //selectedTextStyle: widget.selectedTextStyle,
-        //textStyle: widget.textStyle,
-        selectedIndex: selectedDayIndex,
+        selectedIndex: _indexOf(_days, _currentDate.day),
         locale: widget.locale,
-        onTap: (int index) => _dayController.jumpToItem(index),
-        onChanged: (_) {
-          _onDateTimeChanged();
-          _initDays();
+        onChanged: _onDayChanged,
+        onTap: (int index) {
+          _dayController.jumpToItem(index);
+          _onDayChanged(index);
         },
       ),
     );
   }
 
-  void _initMonths() {
-    if (_selectedDate.year == widget.maximumDate.year &&
-        _selectedDate.year == widget.minimumDate.year) {
-      _months = [
-        for (int i = widget.minimumDate.month;
-            i <= widget.maximumDate.month;
-            i++)
-          i
-      ];
-    } else if (_selectedDate.year == widget.maximumDate.year) {
-      _months = [for (int i = 1; i <= widget.maximumDate.month; i++) i];
-    } else if (_selectedDate.year == widget.minimumDate.year) {
-      _months = [for (int i = widget.minimumDate.month; i <= 12; i++) i];
-    } else {
-      _months = [for (int i = 1; i <= 12; i++) i];
-    }
-  }
-
-  void _initDays() {
-    int maximumDay =
-        getMonthlyDate(year: _selectedDate.year, month: _selectedDate.month);
-    _days = [for (int i = 1; i <= maximumDay; i++) i];
-    if (_selectedDate.year == widget.maximumDate.year &&
-        _selectedDate.month == widget.maximumDate.month &&
-        _selectedDate.year == widget.minimumDate.year &&
-        _selectedDate.month == widget.minimumDate.month) {
-      _days = _days.sublist(widget.minimumDate.day - 1, widget.maximumDate.day);
-    } else if (_selectedDate.year == widget.maximumDate.year &&
-        _selectedDate.month == widget.maximumDate.month) {
-      _days = _days.sublist(0, widget.maximumDate.day);
-    } else if (_selectedDate.year == widget.minimumDate.year &&
-        _selectedDate.month == widget.minimumDate.month) {
-      _days = _days.sublist(widget.minimumDate.day - 1, _days.length);
-    }
-  }
-
-  void _onDateTimeChanged() {
-    final maximumDay = getMonthlyDate(year: selectedYear, month: selectedMonth);
-    _selectedDate =
-        DateTime(selectedYear, selectedMonth, min(selectedDay, maximumDay));
-    _initMonths(); // Asegúrate de actualizar los meses
-    _initDays(); // Asegúrate de actualizar los días
-    widget.onDateTimeChanged(_selectedDate);
-  }
-
-  List<Widget> _getScrollDatePicker() {
-    _initDateScrollView();
-
-    // set order of scroll view
+  List<Widget> _orderedColumns() {
     if (widget.viewType?.isNotEmpty ?? false) {
-      final viewList = <Widget>[];
-
-      for (var view in widget.viewType!) {
-        switch (view) {
+      return widget.viewType!.map((v) {
+        switch (v) {
           case DatePickerViewType.year:
-            viewList.add(_yearScrollView);
-            break;
+            return _buildYearColumn();
           case DatePickerViewType.month:
-            viewList.add(_monthScrollView);
-            break;
+            return _buildMonthColumn();
           case DatePickerViewType.day:
-            viewList.add(_dayScrollView);
-            break;
+            return _buildDayColumn();
         }
-      }
-
-      return viewList;
+      }).toList();
     }
-
-    // Default order
-    return [_yearScrollView, _monthScrollView, _dayScrollView];
+    return [_buildYearColumn(), _buildMonthColumn(), _buildDayColumn()];
   }
+
+  // ───────── Build ─────────
 
   @override
   Widget build(BuildContext context) {
-    // Definir las traducciones para "Confirmar"
-    final Map<String, String> confirmTranslations = {
+    final confirmTexts = {
       'en': 'Confirm',
       'es': 'Confirmar',
       'fr': 'Confirmer',
       'de': 'Bestätigen',
-      // Agrega más traducciones según sea necesario
     };
-
-    // Obtener el texto de "Confirmar" según el idioma
-    String confirmText =
-        confirmTranslations[widget.locale.languageCode] ?? 'Confirm';
+    final confirmText = confirmTexts[widget.locale.languageCode] ?? 'Confirm';
 
     return Container(
       color: widget.colorBackground,
       child: Stack(
         children: [
-          // Date Picker Indicator
           Align(
             alignment: Alignment.center,
             child: Padding(
-              padding: EdgeInsets.only(top: 25),
+              padding: const EdgeInsets.only(top: 25),
               child: widget.indicator ??
                   Container(
                     height: widget.options.itemExtent,
-                    decoration: BoxDecoration(
-                      color: widget.colorIndicator,
-                    ),
+                    decoration: BoxDecoration(color: widget.colorIndicator),
                   ),
             ),
           ),
           Row(
             mainAxisAlignment: widget.scrollViewOptions.mainAxisAlignment,
             crossAxisAlignment: widget.scrollViewOptions.crossAxisAlignment,
-            children: _getScrollDatePicker(),
+            children: _orderedColumns(),
           ),
           Align(
             alignment: Alignment.topRight,
-            child: Container(
+            child: Padding(
               padding: const EdgeInsets.only(right: 20),
-              child: TextButton(
-                //sin espacios
-                style: ButtonStyle(),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+              child: MaterialButton(
+                height: widget.heightButtom,
+                color: widget.colorConfirmButton,
+                shape: RoundedRectangleBorder(
+                  borderRadius: widget.borderRadiusButton,
+                ),
+                onPressed: () => Navigator.pop(context),
                 child: Text(
                   confirmText,
                   textAlign: TextAlign.end,

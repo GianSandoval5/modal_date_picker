@@ -7,7 +7,7 @@ import 'package:modal_date_picker/src/export.dart';
 class DateScrollView extends StatefulWidget {
   const DateScrollView({
     super.key,
-    required this.onChanged,
+    this.onChanged,
     required this.dates,
     required this.controller,
     required this.options,
@@ -21,7 +21,7 @@ class DateScrollView extends StatefulWidget {
   final FixedExtentScrollController controller;
 
   /// On optional listener that's called when the centered item changes.
-  final ValueChanged<int> onChanged;
+  final ValueChanged<int>? onChanged;
 
   /// This is a list of dates.
   final List dates;
@@ -39,8 +39,6 @@ class DateScrollView extends StatefulWidget {
   final Locale locale;
 
   /// Adds the onTap property to enable clicking to navigate dates.
-  ///
-  /// The onTap property allows users to navigate dates by clicking on them.
   final ValueChanged<int> onTap;
 
   @override
@@ -99,7 +97,7 @@ class _DateScrollViewState extends State<DateScrollView> {
               setState(() {
                 _selectedIndex = index;
               });
-              widget.onChanged(index);
+              widget.onChanged?.call(index);
             },
             childDelegate: widget.options.isLoop ??
                     widget.scrollViewOptions.isLoop &&
