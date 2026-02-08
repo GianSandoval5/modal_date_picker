@@ -264,3 +264,15 @@ dateCustomModalBottomSheet(
 ```
 
 ## 📜 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 👨‍💻 Author
+
+**Gian Sandoval**
+
+[![GitHub](https://img.shields.io/badge/GitHub-GianSandoval5-181717?style=flat&logo=github)](https://github.com/GianSandoval5)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-giansandoval-0A66C2?style=flat&logo=linkedin)](https://linkedin.com/in/giansandoval)
+[![Email](https://img.shields.io/badge/Email-giansando2022%40gmail.com-EA4335?style=flat&logo=gmail)](mailto:giansando2022@gmail.com)
