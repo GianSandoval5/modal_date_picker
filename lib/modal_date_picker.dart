@@ -34,10 +34,13 @@ void dateCustomModalBottomSheet({
       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
   TextStyle textStyle = const TextStyle(color: Colors.black),
   TextStyle styleConfirmText = const TextStyle(
-      fontWeight: FontWeight.bold, height: 1.0, color: Colors.indigoAccent),
+      fontWeight: FontWeight.bold, height: 1.0, color: Colors.white),
   void Function(DateTime)? onDateTimeChanged, // Nuevo parámetro opcional
   DateTime? minimumDate,
   DateTime? maximumDate,
+  Color colorConfirmButton = Colors.indigoAccent,
+  BorderRadius? borderRadiusButton,
+  double heightButtom = 25.0,
 }) {
   DateTime? selectedDate = controller.text.isNotEmpty
       ? _parseDate(controller.text,
@@ -85,6 +88,7 @@ void dateCustomModalBottomSheet({
                     minimumDate: minimumDate ?? DateTime(1980),
                     maximumDate: maximumDate ?? DateTime.now(),
                     onDateTimeChanged: (DateTime value) {
+                      selectedDate = value;
                       if (onDateTimeChanged != null) {
                         onDateTimeChanged(value);
                       } else {
@@ -97,6 +101,10 @@ void dateCustomModalBottomSheet({
                         }
                       }
                     },
+                    colorConfirmButton: colorConfirmButton,
+                    borderRadiusButton: borderRadiusButton ??
+                        const BorderRadius.all(Radius.circular(10)),
+                    heightButtom: heightButtom,
                   ),
                 ),
               ],
