@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:modal_date_picker/src/export.dart';
 
+/// A scroll-based date picker widget.
+///
+/// Displays three scrollable columns (year, month, day) and a confirm button.
+/// The selected date is emitted through [onDateTimeChanged].
 class ScrollDatePicker extends StatefulWidget {
+  /// Creates a [ScrollDatePicker].
   ScrollDatePicker({
     Key? key,
     this.viewType,
@@ -24,20 +29,49 @@ class ScrollDatePicker extends StatefulWidget {
         locale = locale ?? const Locale('en', 'US'),
         options = options ?? const DatePickerOptions();
 
+  /// The order and selection of date columns to display.
   final List<DatePickerViewType>? viewType;
+
+  /// The initially selected date.
   final DateTime selectedDate;
+
+  /// The earliest selectable date.
   final DateTime minimumDate;
+
+  /// The latest selectable date.
   final DateTime maximumDate;
+
+  /// Called whenever the user changes the date.
   final ValueChanged<DateTime> onDateTimeChanged;
+
+  /// Options for the scroll wheel appearance (item extent, diameter, etc.).
   final DatePickerOptions options;
+
+  /// The locale used for month names and button labels.
   final Locale locale;
+
+  /// Options for each scroll column (year, month, day).
   final DatePickerScrollViewOptions scrollViewOptions;
+
+  /// Custom indicator widget displayed behind the selected row.
   final Widget? indicator;
+
+  /// Background color of the picker container.
   final Color colorBackground;
+
+  /// Color of the default selection indicator.
   final Color colorIndicator;
+
+  /// Text style for the confirm button.
   final TextStyle styleConfirmText;
+
+  /// Background color of the confirm button.
   final Color colorConfirmButton;
+
+  /// Border radius of the confirm button.
   final BorderRadius borderRadiusButton;
+
+  /// Height of the confirm button.
   final double heightButtom;
 
   @override

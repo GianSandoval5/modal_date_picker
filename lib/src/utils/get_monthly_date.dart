@@ -1,3 +1,6 @@
+/// Returns the number of days in the given [month] of [year].
+///
+/// Correctly handles leap years.
 int getMonthlyDate({required int year, required int month}) {
   int day = 0;
   switch (month) {

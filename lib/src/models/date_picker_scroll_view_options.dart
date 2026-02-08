@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
 
+/// Options that control the layout and appearance of the three date columns.
 class DatePickerScrollViewOptions {
+  /// Options for the year column.
   final ScrollViewDetailOptions year;
+
+  /// Options for the month column.
   final ScrollViewDetailOptions month;
+
+  /// Options for the day column.
   final ScrollViewDetailOptions day;
+
+  /// How the columns are aligned along the main axis.
   final MainAxisAlignment mainAxisAlignment;
+
+  /// How the columns are aligned along the cross axis.
   final CrossAxisAlignment crossAxisAlignment;
 
+  /// Creates options for the three date scroll columns.
   const DatePickerScrollViewOptions({
     required this.year,
     required this.month,
@@ -15,7 +26,7 @@ class DatePickerScrollViewOptions {
     this.crossAxisAlignment = CrossAxisAlignment.center,
   });
 
-  // Applies the given [ScrollViewDetailOptions] to all three options ie. year, month and day.
+  /// Applies the given [ScrollViewDetailOptions] to all three columns.
   static DatePickerScrollViewOptions all(ScrollViewDetailOptions value) {
     return DatePickerScrollViewOptions(
       year: value,
@@ -25,7 +36,9 @@ class DatePickerScrollViewOptions {
   }
 }
 
+/// Detailed options for a single scroll column (year, month or day).
 class ScrollViewDetailOptions {
+  /// Creates detail options for a scroll column.
   const ScrollViewDetailOptions({
     this.label = '',
     this.alignment = Alignment.centerLeft,

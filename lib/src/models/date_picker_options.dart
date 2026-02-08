@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Options that control the appearance and behavior of the scroll wheel.
 class DatePickerOptions {
+  /// Creates options for the date picker scroll wheel.
   const DatePickerOptions({
     this.itemExtent = 30.0,
     this.diameterRatio = 3,

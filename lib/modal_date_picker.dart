@@ -1,3 +1,7 @@
+/// A customizable modal date picker for Flutter.
+///
+/// Provides a scroll-based date selection with support for multiple locales,
+/// date ranges, and real-time [TextEditingController] updates.
 library modal_date_picker;
 
 export 'src/models/date_picker_view_type.dart';
@@ -22,24 +26,69 @@ DateTime? _parseDate(String date, {String format = 'dd/MM/yyyy'}) {
   return null;
 }
 
+/// Shows a modal bottom sheet containing a [ScrollDatePicker].
+///
+/// The selected date is written to the [controller] in the specified format.
+///
+/// {@tool snippet}
+/// ```dart
+/// dateCustomModalBottomSheet(
+///   context: context,
+///   controller: _controller,
+///   locale: const Locale('es', 'ES'),
+/// );
+/// ```
+/// {@end-tool}
 void dateCustomModalBottomSheet({
+  /// The build context used to display the modal.
   required BuildContext context,
+
+  /// The text editing controller that will receive the selected date.
   required TextEditingController controller,
+
+  /// Background color of the date picker. Defaults to [Colors.white].
   Color colorBackground = Colors.white,
+
+  /// Color of the selection indicator. Defaults to [Colors.indigoAccent].
   Color colorIndicator = Colors.indigoAccent,
+
+  /// Locale for month names and confirm button text. Defaults to `Locale('es', 'ES')`.
   Locale locale = const Locale('es', 'ES'),
-  bool formatDate = false, // Nuevo parámetro opcional
+
+  /// If `true`, uses `yyyy/MM/dd` format; otherwise `dd/MM/yyyy`.
+  bool formatDate = false,
+
+  /// Custom column order. Defaults to `[day, month, year]`.
   List<DatePickerViewType>? viewType,
+
+  /// Text style for the selected (centered) item.
   TextStyle selectedTextStyle = const TextStyle(
       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+
+  /// Text style for non-selected items.
   TextStyle textStyle = const TextStyle(color: Colors.black),
+
+  /// Text style for the confirm button label.
   TextStyle styleConfirmText = const TextStyle(
       fontWeight: FontWeight.bold, height: 1.0, color: Colors.white),
-  void Function(DateTime)? onDateTimeChanged, // Nuevo parámetro opcional
+
+  /// Optional callback invoked when the date changes. When provided,
+  /// the [controller] text is **not** updated automatically.
+  void Function(DateTime)? onDateTimeChanged,
+
+  /// Earliest selectable date. Defaults to `DateTime(1980)`.
   DateTime? minimumDate,
+
+  /// Latest selectable date. Defaults to `DateTime.now()`.
   DateTime? maximumDate,
+
+  /// Background color of the confirm button. Defaults to [Colors.indigoAccent].
   Color colorConfirmButton = Colors.indigoAccent,
+
+  /// Border radius of the confirm button.
   BorderRadius? borderRadiusButton,
+
+  /// Height of the confirm button. Defaults to `25.0`.
   double heightButtom = 25.0,
 }) {
   DateTime? selectedDate = controller.text.isNotEmpty

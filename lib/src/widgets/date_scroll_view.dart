@@ -1,10 +1,13 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_date_picker/src/export.dart';
 
+/// A single scrollable column used inside [ScrollDatePicker].
+///
+/// Wraps a [ListWheelScrollView] and provides tap-to-select and
+/// scroll-to-select functionality.
 class DateScrollView extends StatefulWidget {
+  /// Creates a [DateScrollView].
   const DateScrollView({
     super.key,
     this.onChanged,

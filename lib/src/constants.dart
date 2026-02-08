@@ -1,21 +1,50 @@
 import 'package:flutter/cupertino.dart';
 
+/// Language code for Korean.
 const String ko = 'ko';
+
+/// Language code for French.
 const String fr = 'fr';
+
+/// Language code for German.
 const String de = 'de';
+
+/// Language code for Vietnamese.
 const String vi = 'vi';
+
+/// Language code for English.
 const String en = 'en';
+
+/// Language code for Indonesian.
 const String id = 'id';
+
+/// Language code for Italian.
 const String it = 'it';
+
+/// Language code for Thai.
 const String th = 'th';
+
+/// Language code for Spanish.
 const String es = 'es';
+
+/// Language code for Dutch.
 const String nl = 'nl';
+
+/// Language code for Chinese.
 const String zh = 'zh';
+
+/// Language code for Arabic.
 const String ar = 'ar';
+
+/// Language code for Portuguese.
 const String pt = 'pt';
+
+/// Language code for Turkish.
 const String tr = 'tr';
 
+/// Extension on [Locale] that provides localized month names.
 extension LocaleExtension on Locale {
+  /// Returns a list of localized month names for the current [languageCode].
   List<String> get months {
     switch (languageCode) {
       case en:
