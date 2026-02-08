@@ -1,5 +1,3 @@
-library modal_date_picker;
-
 export 'scroll_date_picker.dart';
 export 'constants.dart';
 export 'models/date_picker_options.dart';

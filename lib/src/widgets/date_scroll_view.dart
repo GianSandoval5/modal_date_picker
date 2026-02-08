@@ -45,10 +45,11 @@ class DateScrollView extends StatefulWidget {
   final ValueChanged<int> onTap;
 
   @override
-  _DateScrollViewState createState() => _DateScrollViewState();
+  DateScrollViewState createState() => DateScrollViewState();
 }
 
-class _DateScrollViewState extends State<DateScrollView> {
+/// State for [DateScrollView].
+class DateScrollViewState extends State<DateScrollView> {
   late int _selectedIndex;
 
   @override

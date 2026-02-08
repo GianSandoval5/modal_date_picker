@@ -2,7 +2,7 @@
 ///
 /// Provides a scroll-based date selection with support for multiple locales,
 /// date ranges, and real-time [TextEditingController] updates.
-library modal_date_picker;
+library;
 
 export 'src/models/date_picker_view_type.dart';
 export 'src/scroll_date_picker.dart';
@@ -110,7 +110,7 @@ void dateCustomModalBottomSheet({
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {
           return Container(
-            decoration: BoxDecoration(color: Colors.transparent),
+            decoration: const BoxDecoration(color: Colors.transparent),
             height: 320,
             child: Column(
               mainAxisSize: MainAxisSize.min,

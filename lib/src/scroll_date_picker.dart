@@ -8,7 +8,7 @@ import 'package:modal_date_picker/src/export.dart';
 class ScrollDatePicker extends StatefulWidget {
   /// Creates a [ScrollDatePicker].
   ScrollDatePicker({
-    Key? key,
+    super.key,
     this.viewType,
     DateTime? minimumDate,
     DateTime? maximumDate,

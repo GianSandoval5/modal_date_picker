@@ -1,5 +1,5 @@
 /// Types of columns available in the date picker.
-library modal_date_picker;
+library;
 
 /// Represents a date column type used to configure the visible columns.
 enum DatePickerViewType {
